@@ -1,12 +1,14 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light theme */
+  --background: #cce7ff; /* Mellow light blue */
+  --foreground: #003366; /* Deep, professional navy */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Dark theme: Adjusted to maintain a blue palette */
+    --background: #002244; /* Deep blue */
+    --foreground: #a8cfff; /* Light blue for contrast */
   }
 }
 
