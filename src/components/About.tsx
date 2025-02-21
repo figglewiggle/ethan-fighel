@@ -4,29 +4,57 @@ import React from "react";
 import { css } from "@emotion/react";
 
 const containerStyle = css`
-  margin: 2rem 0 2rem 5vw; /* Positioned to the left with some left margin */
+  margin: 2rem 0 2rem 5vw;
   margin-top: 3rem;
-  max-width: 800px; /* Set width to 800px */
+  max-width: 800px;
   padding: 2.5rem;
-  background: var(--background);
+  background: #cce7ff; /* Light mode: light background */
+  color: #003366; /* Light mode: dark text */
   border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); /* Increased box shadow */
+  border-left: 5px solid #ff8a00;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+
+  /* Dark mode styles */
+  html.dark & {
+    background: #002244; /* Dark mode: dark background */
+    color: #a8cfff; /* Dark mode: light text */
+    box-shadow: 0 12px 24px rgba(255, 255, 255, 0.2); /* Increased shadow for dark mode */
+  }
 `;
 
 const titleStyle = css`
   font-size: 3rem;
   font-family: var(--font-righteous);
   margin-bottom: 1.5rem;
-  text-align: left; /* Align title to the left */
-  color: var(--foreground);
+  text-align: left;
+  color: inherit; /* Use container's text color */
+  position: relative;
+  padding-bottom: 0.5rem;
+  transition: color 0.3s ease;
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 60%;
+    height: 4px;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+  }
 `;
 
 const textStyle = css`
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--foreground);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-align: left; /* Ensure text is aligned to the left */
+  text-align: left;
+  color: inherit; /* Use container's text color */
+  transition: color 0.3s ease;
+
+  p {
+    margin-bottom: 1.25rem;
+  }
 `;
 
 const About: React.FC = () => {
