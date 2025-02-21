@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { css } from "@emotion/react";
 import Image from "next/image";
-import Link from "next/link";
 import { Moon, Sun } from "phosphor-react";
 
 // Styles for the header container
@@ -79,6 +78,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ setCurrentTab }) => {
   const [mode, setMode] = useState(
+    typeof window !== "undefined" &&
     document.documentElement.classList.contains("dark")
   );
   const toggleTheme = () => {

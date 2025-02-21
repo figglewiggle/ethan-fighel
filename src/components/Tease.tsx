@@ -2,7 +2,6 @@
 "use client";
 import React from "react";
 import { css } from "@emotion/react";
-import Link from "next/link";
 
 const containerStyle = css`
   display: flex;
