@@ -28,7 +28,7 @@ const iconStyle = css`
   cursor: pointer;
 
   &:hover {
-    color: #ff8a00;
+    color: #b7245a; /* Darker version of the base icon color */
     transform: scale(1.1);
   }
 `;

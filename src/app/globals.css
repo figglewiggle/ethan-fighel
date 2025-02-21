@@ -1,18 +1,18 @@
 :root {
   /* Light theme */
-  --background: #cce7ff; /* Mellow light blue */
+  --background: #fbfdff; /* Mellow light blue */
   --foreground: #003366; /* Deep, professional navy */
 }
 
 html.dark {
-  --background: #002244; /* Deep blue */
+  --background: #27323d; /* Deep blue */
   --foreground: #a8cfff; /* Light blue for contrast */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     /* Dark theme: Adjusted to maintain a blue palette */
-    --background: #002244; /* Deep blue */
+    --background: #27323d; /* Deep blue */
     --foreground: #a8cfff; /* Light blue for contrast */
   }
 }

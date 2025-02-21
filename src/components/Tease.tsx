@@ -41,7 +41,7 @@ const buttonStyle = css`
   transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background-color: #ff8a00;
+    background-color: #b7245a; /* Darker version of #e52e71 */
     transform: translateX(4px);
 
     /* Invert the arrow color on hover */
@@ -53,24 +53,24 @@ const buttonStyle = css`
 
 const arrowStyle = css`
   font-size: 1.25rem;
-  color: #ff8a00;
+  color:rgb(255, 240, 201);
 `;
 
 interface TeaseProps {
-    setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
 }
+
 const Tease: React.FC<TeaseProps> = ({ setCurrentTab }) => {
   return (
     <div css={containerStyle}>
       <h1 css={nameStyle}>Ethan Fighel</h1>
       <p css={professionStyle}>Full-Stack Developer</p>
-    
-        <button css={buttonStyle} onClick={() => setCurrentTab(1)}>
-          More About Me{" "}
-          <span className="arrow" css={arrowStyle}>
-            →
-          </span>
-        </button>
+      <button css={buttonStyle} onClick={() => setCurrentTab(1)}>
+        More About Me{" "}
+        <span className="arrow" css={arrowStyle}>
+          →
+        </span>
+      </button>
     </div>
   );
 };

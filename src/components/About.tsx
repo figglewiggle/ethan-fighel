@@ -1,85 +1,233 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { css } from "@emotion/react";
+import { ArrowRight } from "phosphor-react";
+import Image from "next/image";
 
-const containerStyle = css`
-  margin: 2rem 0 2rem 5vw;
-  margin-top: 3rem;
-  max-width: 800px;
-  padding: 2.5rem;
-  background: #cce7ff; /* Light mode: light background */
-  color: #003366; /* Light mode: dark text */
-  border-radius: 8px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25); /* Increased box shadow */
-  border-left: 5px solid #ff8a00;
-  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-
-  /* Dark mode styles */
-  html.dark & {
-    background: #002244; /* Dark mode: dark background */
-    color: #a8cfff; /* Dark mode: light text */
-    box-shadow: 0 12px 24px rgba(255, 255, 255, 0.2); /* Increased shadow for dark mode */
-  }
+// Outer container to vertically center the entire section
+const outerContainerStyle = css`
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
-const titleStyle = css`
-  font-size: 3rem;
+// Section title style (aligned left)
+const sectionTitleStyle = css`
+  font-size: 2.5rem;
   font-family: var(--font-righteous);
-  margin-bottom: 1.5rem;
   text-align: left;
-  color: inherit; /* Use container's text color */
-  position: relative;
-  padding-bottom: 0.5rem;
-  transition: color 0.3s ease;
+  color: var(--foreground);
+  margin: 2rem 5vw;
+`;
 
-  &:after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 60%;
-    height: 4px;
-    background: linear-gradient(90deg, #ff8a00, #e52e71);
+// Container for the stage cards and arrow buttons
+const containerStyle = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  margin: 0 5vw 2rem 5vw;
+  flex-wrap: wrap;
+`;
+
+// Stage card style with fixed min-height, flex layout, and active highlighting
+const stageCardStyle = (isActive: boolean) => css`
+  background: var(--background);
+  color: var(--foreground);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  max-width: 250px;
+  flex: 1;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+  cursor: pointer;
+  border: ${isActive ? "2px solid #e52e71" : "none"};
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
   }
 `;
 
-const textStyle = css`
+// Stage card title style
+const stageTitleStyle = css`
+  font-size: 1.5rem;
+  font-family: var(--font-righteous);
+  margin-bottom: 0.5rem;
+  text-align: left;
+`;
+
+// Stage card short description style
+const stageShortDescStyle = css`
+  font-size: 0.875rem;
+  line-height: 1.4;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: left;
+`;
+
+// Arrow button style – clickable arrow icon
+const arrowButtonStyle = css`
+  color: var(--foreground);
+  font-size: 32px;
+  transition: transform 0.3s ease;
+  margin: 0 1rem;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateX(4px);
+  }
+`;
+
+// Detail container style for active stage details with extra right margin
+const detailContainerStyle = css`
+  margin: 0 10vw 2rem 5vw;
+  padding: 2rem;
+  background: var(--background);
+  color: var(--foreground);
+  border-radius: 8px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+`;
+
+// New grid style for the detail content: text on the left, image on the right
+const detailGridStyle = css`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 2rem;
+  align-items: start;
+`;
+
+// Detail text style – text stays on the left and adjusts width based on the image
+const detailTextStyle = css`
   font-size: 1rem;
   line-height: 1.6;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-align: left;
-  color: inherit; /* Use container's text color */
-  transition: color 0.3s ease;
-
-  p {
-    margin-bottom: 1.25rem;
-  }
 `;
 
-const About: React.FC = () => {
-  return (
-    <div css={containerStyle}>
-      <h1 css={titleStyle}>About Me</h1>
-      <div css={textStyle}>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan
-          eleifend sapien, vel commodo nibh dapibus et. Suspendisse potenti.
-          Integer non lorem vitae justo cursus consequat. Curabitur tincidunt
-          leo ut ipsum dictum, a pretium lectus consequat.
-        </p>
-        <p>
-          Nullam consectetur libero sed sapien varius, sed consequat lorem
-          volutpat. Cras finibus ex sed mauris luctus, non accumsan nibh
-          fermentum. Praesent venenatis, dui a sagittis fermentum, massa libero
-          iaculis elit, eget consectetur nisl nibh ac nulla.
-        </p>
-        <p>
-          Duis ut elit euismod, feugiat libero eget, pretium dui. Curabitur
-          blandit, nulla ut fermentum condimentum, ligula tortor posuere nunc,
-          at scelerisque lacus nibh ac lorem.
-        </p>
+// Detail image style – the image occupies the right column
+// Using responsive layout so the height is not fixed.
+const detailImageStyle = css`
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+`;
+
+// Define the type for each stage
+interface Stage {
+  title: string;
+  shortDesc: string;
+  detailText: string;
+  imageUrl: string;
+}
+
+// Stage card component
+interface StageCardProps {
+  stage: Stage;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+const StageCard: React.FC<StageCardProps> = ({ stage, isActive, onClick }) => (
+  <div css={stageCardStyle(isActive)} onClick={onClick}>
+    <h2 css={stageTitleStyle}>{stage.title}</h2>
+    <p css={stageShortDescStyle}>{stage.shortDesc}</p>
+  </div>
+);
+
+// Arrow button component
+interface ArrowButtonProps {
+  onClick: () => void;
+}
+
+const ArrowButton: React.FC<ArrowButtonProps> = ({ onClick }) => (
+  <div css={arrowButtonStyle} onClick={onClick}>
+    <ArrowRight />
+  </div>
+);
+
+// Stage detail component for showing active stage details in an article-like layout
+interface StageDetailProps {
+  stage: Stage;
+}
+
+const StageDetail: React.FC<StageDetailProps> = ({ stage }) => (
+  <div css={detailContainerStyle}>
+    <div css={detailGridStyle}>
+      <div css={detailTextStyle}>
+        <p>{stage.detailText}</p>
       </div>
+      <div>
+        <Image
+          src={stage.imageUrl}
+          alt={stage.title}
+          layout="responsive"
+          width={600}
+          height={400}
+          css={detailImageStyle}
+        />
+      </div>
+    </div>
+  </div>
+);
+
+// Main About component
+const About: React.FC = () => {
+  const stages: Stage[] = [
+    {
+      title: "High School",
+      shortDesc: "Early discovery and curiosity",
+      detailText:
+        "During high school, I explored robotics, participated in coding clubs, and built my first simple programs. This period ignited my passion for technology.",
+      imageUrl: "/JavaLogo.png", // Replace with your image URL
+    },
+    {
+      title: "University",
+      shortDesc: "Growth and learning",
+      detailText:
+        "University was a time of growth. I immersed myself in computer science courses, participated in hackathons, and collaborated on projects that honed my skills.",
+      imageUrl: "/university.jpg", // Replace with your image URL
+    },
+    {
+      title: "Future",
+      shortDesc: "Innovation ahead",
+      detailText:
+        "I'm excited about the future. My goal is to lead innovation in the tech industry, creating impactful solutions that drive progress.",
+      imageUrl: "/future.jpg", // Replace with your image URL
+    },
+  ];
+
+  const [activeStage, setActiveStage] = useState<number>(0);
+
+  // Advance to next stage when arrow is clicked
+  const handleNextStage = (index: number) => {
+    setActiveStage(index);
+  };
+
+  return (
+    <div css={outerContainerStyle}>
+      <h1 css={sectionTitleStyle}>My Story</h1>
+      <div css={containerStyle}>
+        {stages.map((stage, index) => (
+          <React.Fragment key={index}>
+            <StageCard
+              stage={stage}
+              isActive={index === activeStage}
+              onClick={() => setActiveStage(index)}
+            />
+            {index < stages.length - 1 && (
+              <ArrowButton onClick={() => handleNextStage(index + 1)} />
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+      <StageDetail stage={stages[activeStage]} />
     </div>
   );
 };

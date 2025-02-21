@@ -5,7 +5,6 @@ import { css } from "@emotion/react";
 import Image from "next/image";
 import { Moon, Sun } from "phosphor-react";
 
-// Styles for the header container
 const headerStyle = css`
   display: flex;
   justify-content: space-between;
@@ -13,18 +12,15 @@ const headerStyle = css`
   padding: 1rem 2rem;
 `;
 
-// Style for the logo container
 const logoStyle = css`
   cursor: pointer;
 `;
 
-// Styles for the navigation links container
 const navStyle = css`
   display: flex;
   gap: 3rem;
 `;
 
-// Styles for each navigation link with a vibrant gradient hover underline
 const navLinkStyle = css`
   text-decoration: none;
   color: inherit;
@@ -42,16 +38,28 @@ const navLinkStyle = css`
     bottom: -4px;
     width: 0%;
     height: 3px;
-    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    background: #b7245a; /* Darker accent for underline */
     transition: width 0.3s ease;
   }
 
   &:hover {
-    color: #e52e71; /* Text color changes on hover */
+    /* For light mode: assume the default text is a dark blue (#003366),
+       so on hover we'll use an even deeper blue (#002244) */
+    color: #002244;
   }
 
   &:hover:after {
     width: 100%;
+  }
+
+  html.dark & {
+    /* For dark mode: default light text (#a8cfff) darkens on hover */
+    &:hover {
+      color: #89b0d3;
+    }
+    &:after {
+      background: #b7245a;
+    }
   }
 `;
 
@@ -63,12 +71,13 @@ const rightGroupStyle = css`
 const themeToggleStyle = css`
   cursor: pointer;
   transition: color 0.3s ease, transform 0.3s ease;
+  user-select: none;
   margin-left: 5rem;
   margin-right: 5rem;
   color: #e52e71;
   &:hover {
     transform: scale(1.1);
-    color: #ff8a00;
+    color: #b7245a; /* Darker version of the base color */
   }
 `;
 
@@ -79,7 +88,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ setCurrentTab }) => {
   const [mode, setMode] = useState(
     typeof window !== "undefined" &&
-    document.documentElement.classList.contains("dark")
+      document.documentElement.classList.contains("dark")
   );
   const toggleTheme = () => {
     const html = document.documentElement;
@@ -104,7 +113,7 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentTab }) => {
         />
       </div>
 
-      {/* Navigation tabs */}
+      {/* Navigation tabs and theme toggle */}
       <div css={rightGroupStyle}>
         <nav css={navStyle}>
           <div css={navLinkStyle} onClick={() => setCurrentTab(1)}>
