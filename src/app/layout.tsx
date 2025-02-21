@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Montserrat, Roboto_Mono } from "next/font/google";
+import { Righteous, Roboto_Mono } from "next/font/google";
+import EmotionRegistry from "@/components/EmotionRegistry";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const righteous = Righteous({
+  variable: "--font-righteous",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: "400",
 });
 
 const robotoMono = Roboto_Mono({
@@ -30,8 +31,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} ${robotoMono.variable}`}>
-        {children}
+      <body className={`${righteous.variable} ${robotoMono.variable}`}>
+        <EmotionRegistry>{children}</EmotionRegistry>
       </body>
     </html>
   );

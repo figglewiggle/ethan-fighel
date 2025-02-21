@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
+    "@emotion/server": "^11.11.0",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -19,8 +20,24 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "babel-plugin-emotion": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "typescript": "^5"
+  },
+  "babel": {
+    "presets": [
+      "next/babel"
+    ],
+    "plugins": [
+      [
+        "babel-plugin-emotion",
+        {
+          "sourceMap": true,
+          "autoLabel": "dev-only",
+          "labelFormat": "[local]"
+        }
+      ]
+    ]
   }
 }
