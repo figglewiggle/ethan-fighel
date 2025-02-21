@@ -4,6 +4,11 @@
   --foreground: #003366; /* Deep, professional navy */
 }
 
+html.dark {
+  --background: #002244; /* Deep blue */
+  --foreground: #a8cfff; /* Light blue for contrast */
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     /* Dark theme: Adjusted to maintain a blue palette */

@@ -2,6 +2,7 @@
 "use client";
 import React from "react";
 import { css } from "@emotion/react";
+import Link from "next/link";
 
 const containerStyle = css`
   display: flex;
@@ -22,7 +23,6 @@ const professionStyle = css`
   font-size: 1.5rem;
   font-family: var(--font-nunito-sans), sans-serif;
   font-weight: bold;
-  color: #333;
   margin: 0;
   margin-bottom: 0.75rem;
 `;
@@ -62,12 +62,14 @@ const Tease: React.FC = () => {
     <div css={containerStyle}>
       <h1 css={nameStyle}>Ethan Fighel</h1>
       <p css={professionStyle}>Full-Stack Developer</p>
-      <button css={buttonStyle}>
-        More About Me{" "}
-        <span className="arrow" css={arrowStyle}>
-          →
-        </span>
-      </button>
+      <Link href="/about">
+        <button css={buttonStyle}>
+          More About Me{" "}
+          <span className="arrow" css={arrowStyle}>
+            →
+          </span>
+        </button>
+      </Link>
     </div>
   );
 };
