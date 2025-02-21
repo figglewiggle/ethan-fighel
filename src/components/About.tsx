@@ -4,27 +4,29 @@ import React from "react";
 import { css } from "@emotion/react";
 
 const containerStyle = css`
-  margin: 2rem auto;
-  max-width: 800px;
-  padding: 2rem;
+  margin: 2rem 0 2rem 5vw; /* Positioned to the left with some left margin */
+  margin-top: 3rem;
+  max-width: 800px; /* Set width to 800px */
+  padding: 2.5rem;
   background: var(--background);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 `;
 
 const titleStyle = css`
   font-size: 3rem;
   font-family: var(--font-righteous);
   margin-bottom: 1.5rem;
-  text-align: center;
+  text-align: left; /* Align title to the left */
   color: var(--foreground);
 `;
 
 const textStyle = css`
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--foreground);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-align: left; /* Ensure text is aligned to the left */
 `;
 
 const About: React.FC = () => {

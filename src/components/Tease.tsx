@@ -57,19 +57,21 @@ const arrowStyle = css`
   color: #ff8a00;
 `;
 
-const Tease: React.FC = () => {
+interface TeaseProps {
+    setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
+}
+const Tease: React.FC<TeaseProps> = ({ setCurrentTab }) => {
   return (
     <div css={containerStyle}>
       <h1 css={nameStyle}>Ethan Fighel</h1>
       <p css={professionStyle}>Full-Stack Developer</p>
-      <Link href="/about">
-        <button css={buttonStyle}>
+    
+        <button css={buttonStyle} onClick={() => setCurrentTab(1)}>
           More About Me{" "}
           <span className="arrow" css={arrowStyle}>
             →
           </span>
         </button>
-      </Link>
     </div>
   );
 };

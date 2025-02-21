@@ -29,6 +29,7 @@ const navStyle = css`
 const navLinkStyle = css`
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
   font-weight: bold;
   font-size: 1.5rem;
   position: relative;
@@ -72,7 +73,11 @@ const themeToggleStyle = css`
   }
 `;
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ setCurrentTab }) => {
   const [mode, setMode] = useState(
     document.documentElement.classList.contains("dark")
   );
@@ -90,27 +95,27 @@ const Navbar: React.FC = () => {
   return (
     <div css={headerStyle}>
       {/* Logo linking to home */}
-      <Link href="/" css={logoStyle}>
+      <div css={logoStyle} onClick={() => setCurrentTab(0)}>
         <Image
           src="/ethanlogo.png"
           alt="ethan fighel's logo"
           width={113}
           height={71}
         />
-      </Link>
+      </div>
 
       {/* Navigation tabs */}
       <div css={rightGroupStyle}>
         <nav css={navStyle}>
-          <Link href="/about" css={navLinkStyle}>
+          <div css={navLinkStyle} onClick={() => setCurrentTab(1)}>
             About
-          </Link>
-          <Link href="/projects" css={navLinkStyle}>
+          </div>
+          <div css={navLinkStyle} onClick={() => setCurrentTab(2)}>
             Projects
-          </Link>
-          <Link href="/contact" css={navLinkStyle}>
+          </div>
+          <div css={navLinkStyle} onClick={() => setCurrentTab(3)}>
             Contact
-          </Link>
+          </div>
         </nav>
         <div css={themeToggleStyle} onClick={toggleTheme}>
           {mode ? <Moon size={32} /> : <Sun size={32} />}
