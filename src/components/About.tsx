@@ -5,21 +5,39 @@ import { css } from "@emotion/react";
 import { ArrowRight } from "phosphor-react";
 import Image from "next/image";
 
-// Outer container to vertically center the entire section
-const outerContainerStyle = css`
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+// Container that fills the viewport and handles its own scrolling
+const scrollableContainerStyle = css`
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--background);
+  color: var(--foreground);
 `;
 
-// Section title style (aligned left)
-const sectionTitleStyle = css`
-  font-size: 2.5rem;
-  font-family: var(--font-righteous);
+// Introductory section styles
+const introContainerStyle = css`
+  padding: 2rem 5vw;
   text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+`;
+
+const subheaderStyle = css`
+  font-size: 1.5rem;
+  font-family: var(--font-nunito-sans);
+  margin: 0;
   color: var(--foreground);
-  margin: 2rem 5vw;
+`;
+
+const headerStyle = css`
+  font-size: 3rem;
+  font-family: var(--font-montserrat);
+  margin: 0.25rem 0 0;
+  color: var(--foreground);
+`;
+
+// Outer content container for the timeline section
+const contentContainerStyle = css`
+  padding: 2rem 5vw;
 `;
 
 // Container for the stage cards and arrow buttons
@@ -28,48 +46,43 @@ const containerStyle = css`
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
-  margin: 0 5vw 2rem 5vw;
   flex-wrap: wrap;
+  margin-bottom: 2rem;
 `;
 
-// Stage card style with fixed min-height, flex layout, and active highlighting
+// Stage card style with active highlighting
 const stageCardStyle = (isActive: boolean) => css`
   background: var(--background);
   color: var(--foreground);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   max-width: 250px;
   flex: 1;
   min-height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  text-align: left;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
   cursor: pointer;
   border: ${isActive ? "2px solid #e52e71" : "none"};
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
 `;
 
-// Stage card title style
 const stageTitleStyle = css`
   font-size: 1.5rem;
-  font-family: var(--font-righteous);
+  font-family: var(--font-montserrat);
   margin-bottom: 0.5rem;
-  text-align: left;
 `;
 
-// Stage card short description style
 const stageShortDescStyle = css`
   font-size: 0.875rem;
   line-height: 1.4;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-align: left;
+  font-family: var(--font-roboto-mono);
 `;
 
 // Arrow button style – clickable arrow icon
@@ -85,34 +98,28 @@ const arrowButtonStyle = css`
   }
 `;
 
-// Detail container style for active stage details with extra right margin
+// Detail container style for active stage details
 const detailContainerStyle = css`
-  margin: 0 10vw 2rem 5vw;
   padding: 2rem;
   background: var(--background);
   color: var(--foreground);
   border-radius: 8px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 `;
 
-// New grid style for the detail content: text on the left, image on the right
 const detailGridStyle = css`
   display: grid;
   grid-template-columns: 1fr auto;
-  column-gap: 2rem;
+  gap: 2rem;
   align-items: start;
 `;
 
-// Detail text style – text stays on the left and adjusts width based on the image
 const detailTextStyle = css`
   font-size: 1rem;
   line-height: 1.6;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-align: left;
+  font-family: var(--font-roboto-mono);
 `;
 
-// Detail image style – the image occupies the right column
-// Using responsive layout so the height is not fixed.
 const detailImageStyle = css`
   border-radius: 8px;
   max-width: 100%;
@@ -152,7 +159,7 @@ const ArrowButton: React.FC<ArrowButtonProps> = ({ onClick }) => (
   </div>
 );
 
-// Stage detail component for showing active stage details in an article-like layout
+// Stage detail component for showing active stage details
 interface StageDetailProps {
   stage: Stage;
 }
@@ -177,7 +184,7 @@ const StageDetail: React.FC<StageDetailProps> = ({ stage }) => (
   </div>
 );
 
-// Main About component
+// Main About component with the updated structure
 const About: React.FC = () => {
   const stages: Stage[] = [
     {
@@ -211,23 +218,31 @@ const About: React.FC = () => {
   };
 
   return (
-    <div css={outerContainerStyle}>
-      <h1 css={sectionTitleStyle}>My Story</h1>
-      <div css={containerStyle}>
-        {stages.map((stage, index) => (
-          <React.Fragment key={index}>
-            <StageCard
-              stage={stage}
-              isActive={index === activeStage}
-              onClick={() => setActiveStage(index)}
-            />
-            {index < stages.length - 1 && (
-              <ArrowButton onClick={() => handleNextStage(index + 1)} />
-            )}
-          </React.Fragment>
-        ))}
-      </div>
-      <StageDetail stage={stages[activeStage]} />
+    <div css={scrollableContainerStyle}>
+      {/* Introductory Section */}
+      <section css={introContainerStyle}>
+        <p css={subheaderStyle}>Hey! I'm</p>
+        <h1 css={headerStyle}>Ethan Fighel</h1>
+      </section>
+
+      {/* Timeline/Story Section */}
+      <section css={contentContainerStyle}>
+        <div css={containerStyle}>
+          {stages.map((stage, index) => (
+            <React.Fragment key={index}>
+              <StageCard
+                stage={stage}
+                isActive={index === activeStage}
+                onClick={() => setActiveStage(index)}
+              />
+              {index < stages.length - 1 && (
+                <ArrowButton onClick={() => handleNextStage(index + 1)} />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+        <StageDetail stage={stages[activeStage]} />
+      </section>
     </div>
   );
 };

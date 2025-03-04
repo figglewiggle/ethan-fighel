@@ -14,7 +14,7 @@ const containerStyle = css`
 
 const nameStyle = css`
   font-size: 6rem;
-  font-family: var(--font-righteous);
+  font-family: var(--font-montserrat);
   margin: 0;
 `;
 

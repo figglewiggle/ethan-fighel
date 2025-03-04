@@ -15,7 +15,7 @@ const containerStyle = css`
 
 const titleStyle = css`
   font-size: 2rem;
-  font-family: var(--font-righteous);
+  font-family: var(--font-montserrat);
   color: var(--foreground);
   margin-bottom: 1rem;
 `;

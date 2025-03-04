@@ -6,8 +6,9 @@ import { ArrowLeft, ArrowRight } from "phosphor-react";
 
 interface CollageSliderProps {
   children: React.ReactNode;
-  slideWidth?: number; // width in pixels
-  slideHeight?: number; // height in pixels
+  // Pass dimensions as strings in vh (e.g., "80vh")
+  slideWidth?: string;
+  slideHeight?: string;
 }
 
 const sliderContainerStyle = css`
@@ -51,28 +52,46 @@ const rightArrowStyle = css`
   right: 10px;
 `;
 
+// Helper function to convert a vh string (e.g., "80vh") to pixels.
+const convertVhToPx = (vh: string): number => {
+  const numericValue = parseFloat(vh);
+  return (window.innerHeight * numericValue) / 100;
+};
+
 const CollageSlider: React.FC<CollageSliderProps> = ({
   children,
   slideWidth,
   slideHeight,
 }) => {
-  // Store the slides in state as an array (circular list)
+  // Convert children to an array (for circular rotation)
   const originalSlides = React.Children.toArray(children);
   const [slides, setSlides] = useState(originalSlides);
   const slideCount = slides.length;
 
-  // Default dimensions: 90% of viewport width, 70% of viewport height.
-  const defaultWidth = slideWidth || Math.round(window.innerWidth * 0.9);
-  const defaultHeight = slideHeight || Math.round(window.innerHeight * 0.7);
-  const dimensions = { width: defaultWidth, height: defaultHeight };
+  // Set defaults if no props provided (using vh units)
+  const defaultWidth = slideWidth || "120vh";
+  const defaultHeight = slideHeight || "70vh";
 
-  // offset controls the current translation (in pixels). Initially 0.
+  // We need a pixel value for the slide width to calculate translations.
+  const [computedWidth, setComputedWidth] = useState(0);
+
+  // Update computedWidth on mount and when the window resizes.
+  useEffect(() => {
+    const updateWidth = () => {
+      setComputedWidth(convertVhToPx(defaultWidth));
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, [defaultWidth]);
+
+  // offset (in pixels) controls the current slide translation.
   const [offset, setOffset] = useState(0);
-  // Flag to enable/disable transitions (disable during instantaneous jumps).
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // When offset changes, update the transform.
+  // Update the slider's transform on offset change.
   useEffect(() => {
     if (sliderRef.current) {
       sliderRef.current.style.transition = transitionEnabled
@@ -82,15 +101,15 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
     }
   }, [offset, transitionEnabled]);
 
-  // Advance to next slide: animate offset from 0 to -width.
+  // Advance to next slide (translate left by one slide width).
   const nextSlide = () => {
     setTransitionEnabled(true);
-    setOffset(-dimensions.width);
+    setOffset(-computedWidth);
   };
 
-  // After next slide animation ends, remove the first slide and append it, then reset offset.
+  // Once the transition completes, update the slides array.
   const handleNextTransitionEnd = () => {
-    setSlides(prev => {
+    setSlides((prev) => {
       const newSlides = [...prev];
       const first = newSlides.shift();
       if (first !== undefined) {
@@ -100,14 +119,13 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
     });
     setTransitionEnabled(false);
     setOffset(0);
-    // Re-enable transition after a short delay.
     setTimeout(() => setTransitionEnabled(true), 50);
   };
 
-  // For previous slide, move the last slide to the front then animate offset back to 0.
+  // For the previous slide, move the last slide to the front and animate back.
   const prevSlide = () => {
     setTransitionEnabled(false);
-    setSlides(prev => {
+    setSlides((prev) => {
       const newSlides = [...prev];
       const last = newSlides.pop();
       if (last !== undefined) {
@@ -115,22 +133,21 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
       }
       return newSlides;
     });
-    setOffset(-dimensions.width);
-    // Allow reflow, then animate back to 0.
+    setOffset(-computedWidth);
     setTimeout(() => {
       setTransitionEnabled(true);
       setOffset(0);
     }, 50);
   };
 
-  // Handle transition end event.
+  // Listen for the end of the transition.
   const handleTransitionEnd = () => {
-    if (offset === -dimensions.width) {
+    if (offset === -computedWidth) {
       handleNextTransitionEnd();
     }
   };
 
-  // Use a ref to throttle wheel events so that only one slide change happens at a time.
+  // Throttle wheel events so only one slide change occurs at a time.
   const scrollingRef = useRef(false);
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
@@ -155,8 +172,8 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
     <div
       css={sliderContainerStyle}
       style={{
-        width: `${dimensions.width}px`,
-        height: `${dimensions.height}px`,
+        width: defaultWidth, // Using the vh string directly
+        height: defaultHeight, // Using the vh string directly
       }}
       onWheel={handleWheel}
     >
@@ -164,14 +181,15 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
         ref={sliderRef}
         css={slidesWrapperStyle}
         onTransitionEnd={handleTransitionEnd}
-        style={{ width: `${slideCount * dimensions.width}px` }}
+        // The wrapper's width must be in pixels for accurate translation.
+        style={{ width: `${slideCount * computedWidth}px` }}
       >
         {slides.map((child, index) => (
           <div
             key={index}
             style={{
-              width: `${dimensions.width}px`,
-              height: `${dimensions.height}px`,
+              width: defaultWidth,
+              height: defaultHeight,
               flexShrink: 0,
             }}
           >
@@ -179,16 +197,10 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
           </div>
         ))}
       </div>
-      <button
-        css={[arrowButtonStyle, leftArrowStyle]}
-        onClick={prevSlide}
-      >
+      <button css={[arrowButtonStyle, leftArrowStyle]} onClick={prevSlide}>
         <ArrowLeft size={24} />
       </button>
-      <button
-        css={[arrowButtonStyle, rightArrowStyle]}
-        onClick={nextSlide}
-      >
+      <button css={[arrowButtonStyle, rightArrowStyle]} onClick={nextSlide}>
         <ArrowRight size={24} />
       </button>
     </div>
