@@ -55,19 +55,19 @@ const buttonStyle = css`
 
 const arrowStyle = css`
   font-size: 1.25rem;
-  color:rgb(255, 240, 201);
+  color: rgb(255, 240, 201);
 `;
 
 interface TeaseProps {
-  setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
+  onNavClick: (tabIndex: number) => void;
 }
 
-const Tease: React.FC<TeaseProps> = ({ setCurrentTab }) => {
+const Tease: React.FC<TeaseProps> = ({ onNavClick }) => {
   return (
     <div css={containerStyle}>
       <h1 css={nameStyle}>Ethan Fighel</h1>
       <p css={professionStyle}>Full-Stack Developer</p>
-      <button css={buttonStyle} onClick={() => setCurrentTab(1)}>
+      <button css={buttonStyle} onClick={() => onNavClick(1)}>
         More About Me{" "}
         <span className="arrow" css={arrowStyle}>
           →

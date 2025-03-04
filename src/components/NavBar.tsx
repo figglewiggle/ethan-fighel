@@ -43,13 +43,11 @@ const navLinkStyle = css`
     bottom: -4px;
     width: 0%;
     height: 3px;
-    background: #b7245a; /* Darker accent for underline */
+    background: #b7245a;
     transition: width 0.3s ease;
   }
 
   &:hover {
-    /* For light mode: assume the default text is a dark blue (#003366),
-       so on hover we'll use an even deeper blue (#002244) */
     color: #002244;
   }
 
@@ -58,7 +56,6 @@ const navLinkStyle = css`
   }
 
   html.dark & {
-    /* For dark mode: default light text (#a8cfff) darkens on hover */
     &:hover {
       color: #89b0d3;
     }
@@ -82,15 +79,15 @@ const themeToggleStyle = css`
   color: #e52e71;
   &:hover {
     transform: scale(1.1);
-    color: #b7245a; /* Darker version of the base color */
+    color: #b7245a;
   }
 `;
 
 interface NavbarProps {
-  setCurrentTab: React.Dispatch<React.SetStateAction<number>>;
+  onNavClick: (tabIndex: number) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ setCurrentTab }) => {
+const Navbar: React.FC<NavbarProps> = ({ onNavClick }) => {
   const [mode, setMode] = useState(
     typeof window !== "undefined" &&
       document.documentElement.classList.contains("dark")
@@ -108,8 +105,8 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentTab }) => {
 
   return (
     <div css={headerStyle}>
-      {/* Logo linking to home */}
-      <div css={logoStyle} onClick={() => setCurrentTab(0)}>
+      {/* Logo linking to the first section */}
+      <div css={logoStyle} onClick={() => onNavClick(0)}>
         <Image
           src="/ethanlogo.png"
           alt="ethan fighel's logo"
@@ -118,16 +115,16 @@ const Navbar: React.FC<NavbarProps> = ({ setCurrentTab }) => {
         />
       </div>
 
-      {/* Navigation tabs and theme toggle */}
+      {/* Navigation tabs */}
       <div css={rightGroupStyle}>
         <nav css={navStyle}>
-          <div css={navLinkStyle} onClick={() => setCurrentTab(1)}>
+          <div css={navLinkStyle} onClick={() => onNavClick(1)}>
             About
           </div>
-          <div css={navLinkStyle} onClick={() => setCurrentTab(2)}>
+          <div css={navLinkStyle} onClick={() => onNavClick(2)}>
             Projects
           </div>
-          <div css={navLinkStyle} onClick={() => setCurrentTab(3)}>
+          <div css={navLinkStyle} onClick={() => onNavClick(3)}>
             Contact
           </div>
         </nav>
