@@ -7,15 +7,17 @@ const containerStyle = css`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center; 
   gap: 2rem;
-  margin-top: 15vh;
-  margin-left: 5vw;
+  height: 100vh;
+  padding-left: 5vw;
 `;
 
 const nameStyle = css`
   font-size: 6rem;
   font-family: var(--font-montserrat);
   margin: 0;
+  margin-left: -0.5rem;
 `;
 
 const professionStyle = css`
