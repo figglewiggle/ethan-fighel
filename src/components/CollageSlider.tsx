@@ -6,22 +6,29 @@ import { ArrowLeft, ArrowRight } from "phosphor-react";
 
 interface CollageSliderProps {
   children: React.ReactNode;
-  // Pass dimensions as strings in vh (e.g., "80vh")
   slideWidth?: string;
   slideHeight?: string;
 }
+
+const outerSliderContainerStyle = css`
+  position: relative;
+  padding: 0 60px;
+  box-sizing: border-box;
+  border-top: 2px solid rgba(229, 46, 113, 0.5);
+  border-bottom: 2px solid rgba(229, 46, 113, 0.5);
+`;
 
 const sliderContainerStyle = css`
   position: relative;
   overflow: hidden;
   margin: 0 auto;
+  box-sizing: border-box;
 `;
 
 const slidesWrapperStyle = css`
   display: flex;
   transition: transform 0.3s ease;
   user-select: none;
-  cursor: grab;
 `;
 
 const arrowButtonStyle = css`
@@ -45,11 +52,11 @@ const arrowButtonStyle = css`
 `;
 
 const leftArrowStyle = css`
-  left: 10px;
+  left: 0;
 `;
 
 const rightArrowStyle = css`
-  right: 10px;
+  right: 0;
 `;
 
 // Helper function to convert a vh string (e.g., "80vh") to pixels.
@@ -69,7 +76,7 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
   const slideCount = slides.length;
 
   // Set defaults if no props provided (using vh units)
-  const defaultWidth = slideWidth || "120vh";
+  const defaultWidth = slideWidth || "90vh";
   const defaultHeight = slideHeight || "70vh";
 
   // We need a pixel value for the slide width to calculate translations.
@@ -86,7 +93,7 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
     return () => window.removeEventListener("resize", updateWidth);
   }, [defaultWidth]);
 
-  // offset (in pixels) controls the current slide translation.
+  // Offset (in pixels) controls the current slide translation.
   const [offset, setOffset] = useState(0);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -169,33 +176,34 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
   };
 
   return (
-    <div
-      css={sliderContainerStyle}
-      style={{
-        width: defaultWidth, // Using the vh string directly
-        height: defaultHeight, // Using the vh string directly
-      }}
-      onWheel={handleWheel}
-    >
+    <div css={outerSliderContainerStyle}>
       <div
-        ref={sliderRef}
-        css={slidesWrapperStyle}
-        onTransitionEnd={handleTransitionEnd}
-        // The wrapper's width must be in pixels for accurate translation.
-        style={{ width: `${slideCount * computedWidth}px` }}
+        css={sliderContainerStyle}
+        style={{
+          width: defaultWidth,
+          height: defaultHeight,
+        }}
+        onWheel={handleWheel}
       >
-        {slides.map((child, index) => (
-          <div
-            key={index}
-            style={{
-              width: defaultWidth,
-              height: defaultHeight,
-              flexShrink: 0,
-            }}
-          >
-            {child}
-          </div>
-        ))}
+        <div
+          ref={sliderRef}
+          css={slidesWrapperStyle}
+          onTransitionEnd={handleTransitionEnd}
+          style={{ width: `${slideCount * computedWidth}px` }}
+        >
+          {slides.map((child, index) => (
+            <div
+              key={index}
+              style={{
+                width: defaultWidth,
+                height: defaultHeight,
+                flexShrink: 0,
+              }}
+            >
+              {child}
+            </div>
+          ))}
+        </div>
       </div>
       <button css={[arrowButtonStyle, leftArrowStyle]} onClick={prevSlide}>
         <ArrowLeft size={24} />

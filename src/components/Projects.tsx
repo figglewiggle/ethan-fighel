@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 "use client";
-import React from "react";
 import { css } from "@emotion/react";
+import React from "react";
+import CollageSlider from "@/components/CollageSlider";
 
 const projectsContainerStyle = css`
   margin: 2rem 5vw;
@@ -12,63 +13,64 @@ const headerStyle = css`
   font-size: 2.5rem;
   font-family: var(--font-righteous);
   color: var(--foreground);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: left;
 `;
 
-const gridStyle = css`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+const slideContainerStyle = css`
+  display: flex;
+  width: 100%;
+  height: 100%;
   gap: 2rem;
+  align-items: center;
 `;
 
-const cardStyle = css`
-  background: #ffffff;
-  color: #003366;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  cursor: pointer;
+const slideDescriptionStyle = css`
+  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+`;
 
-  &:hover {
-    transform: translateY(-5px);
-  }
-
-  /* When dark mode is enabled via html.dark */
-  html.dark & {
-    background: #1a1a1a;
-    color: #ededed;
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-  }
+const slideScreenshotStyle = css`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const projectNameStyle = css`
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  color: var(--foreground);
+`;
+
+const projectDescriptionStyle = css`
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--foreground);
 `;
 
 const techStackStyle = css`
-  font-size: 1rem;
-  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: var(--foreground);
 `;
 
 const learnMoreStyle = css`
   margin-top: auto;
   font-size: 1rem;
   font-weight: bold;
-  color: inherit;
+  color: #e52e71;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #ff8a00;
+    color: #b7245a;
   }
 
   &:hover span {
@@ -81,38 +83,62 @@ const arrowStyle = css`
   transition: transform 0.3s ease;
 `;
 
+const screenshotImageStyle = css`
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
 const Projects: React.FC = () => {
   const projects = [
     {
       name: "Project Alpha",
+      description:
+        "A full-stack application built for scalable performance and user-centric design.",
       tech: "Node.js, TypeScript, React, MongoDB",
+      screenshot: "/images/project-alpha.png",
     },
     {
       name: "Project Beta",
+      description:
+        "A modern web app leveraging Python and Django to deliver robust features.",
       tech: "Python, Django, PostgreSQL",
+      screenshot: "/images/project-beta.png",
     },
     {
       name: "Project Gamma",
+      description:
+        "Enterprise-grade software solution using Java and Spring Boot for high reliability.",
       tech: "Java, Spring Boot, MySQL",
+      screenshot: "/images/project-gamma.png",
     },
   ];
 
   return (
     <div css={projectsContainerStyle}>
-      <h2 css={headerStyle}>Projects</h2>
-      <div css={gridStyle}>
+      <h2 css={headerStyle}>My Projects</h2>
+      <CollageSlider slideWidth="120vh" slideHeight="40vh">
         {projects.map((project, index) => (
-          <div key={index} css={cardStyle}>
-            <div>
+          <div key={index} css={slideContainerStyle}>
+            <div css={slideDescriptionStyle}>
               <h3 css={projectNameStyle}>{project.name}</h3>
+              <p css={projectDescriptionStyle}>{project.description}</p>
               <p css={techStackStyle}>{project.tech}</p>
+              <div css={learnMoreStyle}>
+                Learn More <span css={arrowStyle}>→</span>
+              </div>
             </div>
-            <div css={learnMoreStyle}>
-              Learn More <span css={arrowStyle}>→</span>
+            <div css={slideScreenshotStyle}>
+              <img
+                src={project.screenshot}
+                alt={`Screenshot of ${project.name}`}
+                css={screenshotImageStyle}
+              />
             </div>
           </div>
         ))}
-      </div>
+      </CollageSlider>
     </div>
   );
 };

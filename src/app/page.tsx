@@ -1,8 +1,12 @@
+/** @jsxImportSource @emotion/react */
 "use client";
-import React, { useRef, useEffect } from "react";
+import { css } from "@emotion/react";
+import React, { useRef } from "react";
 import Navbar from "@/components/NavBar";
 import Tease from "@/components/Tease";
 import Links from "@/components/Links";
+import About from "@/components/About";
+import Projects from "@/components/Projects";
 
 export default function Home() {
   // Create refs for each scrollable section.
@@ -64,46 +68,17 @@ export default function Home() {
   return (
     <div>
       <Navbar onNavClick={handleNavClick} />
-      {/* Render your sections sequentially */}
       <div ref={teaseRef}>
         <Tease onNavClick={handleNavClick} />
       </div>
-      <div
-        ref={aboutRef}
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "2rem",
-        }}
-      >
-        <h2>About</h2>
-        <p>This is the about section content.</p>
+      {/* Replace the placeholder About section with the About component */}
+      <div ref={aboutRef} css={sectionStyle}>
+        <About />
       </div>
-      <div
-        ref={projectsRef}
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "2rem",
-        }}
-      >
-        <h2>Projects</h2>
-        <p>This is the projects section content.</p>
+      <div ref={projectsRef} css={sectionStyle}>
+        <Projects />
       </div>
-      <div
-        ref={contactRef}
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "2rem",
-        }}
-      >
+      <div ref={contactRef} css={sectionStyle}>
         <h2>Contact</h2>
         <p>This is the contact section content.</p>
       </div>
@@ -111,3 +86,11 @@ export default function Home() {
     </div>
   );
 }
+
+const sectionStyle = css`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+`;
