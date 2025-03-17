@@ -14,7 +14,7 @@ const modalOverlayStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1100;
 `;
 
 const modalContainerStyle = css`
@@ -113,7 +113,6 @@ const clearButtonStyle = css`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 `;
-
 
 /* Container for the two buttons, laid out in a row */
 const buttonRowStyle = css`
