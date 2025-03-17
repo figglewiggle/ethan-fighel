@@ -1,142 +1,78 @@
 /** @jsxImportSource @emotion/react */
 "use client";
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useState } from "react";
 import CollageSlider from "@/components/CollageSlider";
+import ProjectSlide from "./ProjectSlide"; // assuming you export it from a separate file
 
 const projectsContainerStyle = css`
-  margin: 2rem 5vw;
+  margin: 2rem 2rem;
   max-width: 1200px;
 `;
 
 const headerStyle = css`
-  font-size: 2.5rem;
-  font-family: var(--font-righteous);
+  font-size: 3rem;
+  font-family: var(--font-montserrat);
   color: var(--foreground);
   margin-bottom: 1rem;
   text-align: left;
 `;
 
-const slideContainerStyle = css`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  gap: 2rem;
-  align-items: center;
-`;
-
-const slideDescriptionStyle = css`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const slideScreenshotStyle = css`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const projectNameStyle = css`
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: var(--foreground);
-`;
-
-const projectDescriptionStyle = css`
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  color: var(--foreground);
-`;
-
-const techStackStyle = css`
-  font-size: 1.125rem;
-  margin-bottom: 1.5rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: var(--foreground);
-`;
-
-const learnMoreStyle = css`
-  margin-top: auto;
-  font-size: 1rem;
-  font-weight: bold;
-  color: #e52e71;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #b7245a;
-  }
-
-  &:hover span {
-    transform: translateX(4px);
-  }
-`;
-
-const arrowStyle = css`
-  font-size: 1.25rem;
-  transition: transform 0.3s ease;
-`;
-
-const screenshotImageStyle = css`
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-`;
+interface Project {
+  name: string;
+  description: string;
+  tech: string;
+  screenshot: string;
+  details: string;
+}
 
 const Projects: React.FC = () => {
-  const projects = [
+  // Global expanded state—if any slide is expanded, slider height becomes 70vh.
+  const [expanded, setExpanded] = useState(false);
+
+  const projects: Project[] = [
     {
       name: "Project Alpha",
       description:
         "A full-stack application built for scalable performance and user-centric design.",
       tech: "Node.js, TypeScript, React, MongoDB",
-      screenshot: "/images/project-alpha.png",
+      screenshot: "/CliencePage.png",
+      details:
+        "Project Alpha leverages a microservices architecture to ensure scalability and resilience. It integrates with multiple third-party APIs to enhance user experience and streamline business processes.",
     },
     {
       name: "Project Beta",
       description:
         "A modern web app leveraging Python and Django to deliver robust features.",
       tech: "Python, Django, PostgreSQL",
-      screenshot: "/images/project-beta.png",
+      screenshot: "/CliencePage.png",
+      details:
+        "Project Beta focuses on delivering a seamless user experience with robust backend services. The app employs RESTful APIs and responsive design principles to serve its users efficiently.",
     },
     {
       name: "Project Gamma",
       description:
         "Enterprise-grade software solution using Java and Spring Boot for high reliability.",
       tech: "Java, Spring Boot, MySQL",
-      screenshot: "/images/project-gamma.png",
+      screenshot: "/CliencePage.png",
+      details:
+        "Project Gamma is designed for high performance in demanding enterprise environments. It includes advanced security features, high availability, and extensive monitoring capabilities.",
     },
   ];
 
   return (
     <div css={projectsContainerStyle}>
       <h2 css={headerStyle}>My Projects</h2>
-      <CollageSlider slideWidth="120vh" slideHeight="40vh">
+      <CollageSlider
+        slideWidth="120vh"
+        slideHeight={expanded ? "70vh" : "40vh"}
+      >
         {projects.map((project, index) => (
-          <div key={index} css={slideContainerStyle}>
-            <div css={slideDescriptionStyle}>
-              <h3 css={projectNameStyle}>{project.name}</h3>
-              <p css={projectDescriptionStyle}>{project.description}</p>
-              <p css={techStackStyle}>{project.tech}</p>
-              <div css={learnMoreStyle}>
-                Learn More <span css={arrowStyle}>→</span>
-              </div>
-            </div>
-            <div css={slideScreenshotStyle}>
-              <img
-                src={project.screenshot}
-                alt={`Screenshot of ${project.name}`}
-                css={screenshotImageStyle}
-              />
-            </div>
-          </div>
+          <ProjectSlide
+            key={index}
+            project={project}
+            onToggle={(isExpanded) => setExpanded(isExpanded)}
+          />
         ))}
       </CollageSlider>
     </div>

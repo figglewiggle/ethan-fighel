@@ -7,8 +7,8 @@ const snackbarContainer = css`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: #ff8a00; /* Matches your app's accent/hover color */
-  color: #fff;
+  background: var(--foreground);
+  color: var(--background);
   padding: 0.75rem 1.5rem;
   border-radius: 4px;
   font-size: 0.875rem;

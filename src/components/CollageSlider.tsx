@@ -12,7 +12,7 @@ interface CollageSliderProps {
 
 const outerSliderContainerStyle = css`
   position: relative;
-  padding: 0 60px;
+  padding: 2rem 60px;
   box-sizing: border-box;
   border-top: 2px solid rgba(229, 46, 113, 0.5);
   border-bottom: 2px solid rgba(229, 46, 113, 0.5);
@@ -33,21 +33,25 @@ const slidesWrapperStyle = css`
 
 const arrowButtonStyle = css`
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  top: 20vh;
+  background: transparent;
   border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  color: #fff;
+  width: 40px;
+  height: 40px;
+  color: var(--foreground); /* use a theme variable */
+  font-family: var(
+    --font-righteous
+  ); /* if you want consistency with your headings */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
+  transition: color 0.3s ease;
+
   &:hover {
-    background: rgba(0, 0, 0, 0.7);
+    color: var(--foreground);
+    transform: scale(1.1);
   }
 `;
 
@@ -179,10 +183,13 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
     <div css={outerSliderContainerStyle}>
       <div
         css={sliderContainerStyle}
-        style={{
-          width: defaultWidth,
-          height: defaultHeight,
-        }}
+        style={
+          {
+            width: defaultWidth,
+            // Remove minHeight and only set the CSS variable for base slide height
+            "--slide-height": defaultHeight,
+          } as React.CSSProperties
+        }
         onWheel={handleWheel}
       >
         <div
@@ -196,7 +203,7 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
               key={index}
               style={{
                 width: defaultWidth,
-                height: defaultHeight,
+                // Remove minHeight so the slide grows naturally
                 flexShrink: 0,
               }}
             >
@@ -206,10 +213,10 @@ const CollageSlider: React.FC<CollageSliderProps> = ({
         </div>
       </div>
       <button css={[arrowButtonStyle, leftArrowStyle]} onClick={prevSlide}>
-        <ArrowLeft size={24} />
+        <ArrowLeft size={24} weight="duotone" />
       </button>
       <button css={[arrowButtonStyle, rightArrowStyle]} onClick={nextSlide}>
-        <ArrowRight size={24} />
+        <ArrowRight size={24} weight="duotone" />
       </button>
     </div>
   );
