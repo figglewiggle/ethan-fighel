@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 "use client";
 import { css } from "@emotion/react";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { CaretUp, CaretDown } from "phosphor-react";
 
 const slideContainerStyle = css`
